@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locadora de Veículos</title>
+  <link rel="stylesheet" href="/app/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">L</div>
+        <div>
+          <h1>Locadora</h1>
+          <p>Sistema de veículos</p>
+        </div>
+      </div>
+
+      <nav class="menu" id="menuTabs">
+        <button data-page="dashboard">Dashboard</button>
+        <button data-page="funcionarios">Funcionários</button>
+        <button data-page="clientes">Clientes</button>
+        <button data-page="veiculos">Veículos</button>
+        <button data-page="locacoes">Locações</button>
+        <button data-page="pagamentos">Pagamentos</button>
+        <button data-page="multas">Multas</button>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">BD1</span>
+          <h2 id="pageTitle">Login</h2>
+        </div>
+        <div class="top-actions"><span id="topUser" class="top-user"></span><button class="ghost" id="refreshBtn"
+            type="button">Atualizar dados</button><button class="secondary" id="logoutBtn" type="button">Sair</button>
+        </div>
+      </header>
+
+      <section id="alert" class="alert hidden"></section>
+
+      <section class="page" id="dashboard">
+        <div class="hero-card">
+          <div>
+            <h3>Controle da locadora em uma única tela</h3>
+            <p>Cadastre clientes, veículos, funcionários, locações, pagamentos e multas consumindo diretamente a API do
+              projeto.</p>
+          </div>
+          <div class="car-card">
+            <span>
+              <i class="bi bi-car-front-fill"></i>
+            </span>
+            <strong>Locadora</strong>
+            <small>Gestão simplificada</small>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+          <article><span>Clientes</span><strong id="statClientes">0</strong>
+            <div class="mini-list" id="dashboardClientes"></div>
+          </article>
+          <article><span>Veículos</span><strong id="statVeiculos">0</strong>
+            <div class="mini-list" id="dashboardVeiculos"></div>
+          </article>
+          <article><span>Locações</span><strong id="statLocacoes">0</strong>
+            <div class="mini-list" id="dashboardLocacoes"></div>
+          </article>
+          <article><span>Funcionários</span><strong id="statFuncionarios">0</strong>
+            <div class="mini-list" id="dashboardFuncionarios"></div>
+          </article>
+          <article><span>Pagamentos</span><strong id="statPagamentos">0</strong>
+            <div class="mini-list" id="dashboardPagamentos"></div>
+          </article>
+          <article><span>Multas</span><strong id="statMultas">0</strong>
+            <div class="mini-list" id="dashboardMultas"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page active" id="login">
+        <div class="grid two">
+          <form class="card form-card" id="loginForm">
+            <h3>Entrar no sistema</h3>
+            <p class="muted">Entre com uma conta administradora.</p>
+            <label>Usuário<input name="usuario" required placeholder="" /></label>
+            <label>Senha<input name="senha" type="password" required placeholder="" /></label>
+            <button type="submit">Entrar</button>
+          </form>
+          <div class="card">
+            <h3>Usuário logado</h3>
+            <div id="loggedUser" class="empty">Nenhum login realizado.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="funcionarios">
+        <div class="grid two">
+          <form class="card form-card" data-resource="funcionarios">
+            <h3 id="funcionariosFormTitle">Cadastrar funcionário</h3>
+            <input type="hidden" name="id_funcionario" />
+            <label>Nome<input name="nome" required /></label>
+            <label>CPF<input name="cpf" required /></label>
+            <label>Email<input name="email" type="email" required /></label>
+            <label>Telefone<input name="telefone" /></label>
+            <label>Cargo<input name="cargo" /></label>
+            <label>Usuário<input name="usuario" required /></label>
+            <label>Senha<input name="senha" type="password" /></label>
+            <div class="form-actions">
+              <button type="submit">Salvar</button>
+              <button type="button" class="secondary" data-clear="funcionarios">Limpar</button>
+            </div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Funcionários cadastrados</h3>
+            </div>
+            <div id="funcionariosTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="clientes">
+        <div class="grid two">
+          <form class="card form-card" data-resource="clientes">
+            <h3 id="clientesFormTitle">Cadastrar cliente</h3>
+            <label>CPF<input name="cpf" required /></label>
+            <label>Nome<input name="nome" required /></label>
+            <label>Telefone<input name="telefone" /></label>
+            <label>Email<input name="email" type="email" /></label>
+            <label>CNH<input name="cnh" required /></label>
+            <div class="form-actions"><button type="submit">Salvar</button><button type="button" class="secondary"
+                data-clear="clientes">Limpar</button></div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Clientes cadastrados</h3>
+            </div>
+            <div id="clientesTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="veiculos">
+        <div class="grid two">
+          <form class="card form-card" data-resource="veiculos">
+            <h3 id="veiculosFormTitle">Cadastrar veículo</h3>
+            <label>Placa<input name="placa" required placeholder="ABC1A23" /></label>
+            <label>Marca<input name="marca" required /></label>
+            <label>Modelo<input name="modelo" required /></label>
+            <label>Ano<input name="ano" type="number" required /></label>
+            <label>Valor da diária<input name="valor_diaria" type="number" step="0.01" required /></label>
+            <label>Status<select name="status">
+                <option value="DISPONIVEL">Disponível</option>
+                <option value="ALUGADO">Alugado</option>
+                <option value="MANUTENCAO">Manutenção</option>
+              </select></label>
+            <div class="form-actions"><button type="submit">Salvar</button><button type="button" class="secondary"
+                data-clear="veiculos">Limpar</button></div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Veículos cadastrados</h3>
+            </div>
+            <div id="veiculosTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="locacoes">
+        <div class="grid two">
+          <form class="card form-card" data-resource="locacoes">
+            <h3 id="locacoesFormTitle">Cadastrar locação</h3>
+            <input type="hidden" name="id_locacao" />
+            <label>Cliente<select name="cpf_cliente" required data-select="clientes"></select></label>
+            <label>Veículo<select name="placa_veiculo" required data-select="veiculos"></select></label>
+            <label>Funcionário<select name="id_funcionario" required data-select="funcionarios"></select></label>
+            <label>Data retirada<input name="data_retirada" type="date" required /></label>
+            <label>Data devolução<input name="data_devolucao" type="date" required /></label>
+            <label>Status<select name="status">
+                <option value="ATIVA">Ativa</option>
+                <option value="FINALIZADA">Finalizada</option>
+                <option value="CANCELADA">Cancelada</option>
+              </select></label>
+            <div class="form-actions"><button type="submit">Salvar</button><button type="button" class="secondary"
+                data-clear="locacoes">Limpar</button></div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Locações cadastradas</h3>
+            </div>
+            <div id="locacoesTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="pagamentos">
+        <div class="grid two">
+          <form class="card form-card" data-resource="pagamentos">
+            <h3>Cadastrar pagamento</h3>
+            <label>Locação<select name="id_locacao" required data-select="locacoes"></select></label>
+            <label>Valor<input name="valor" type="number" step="0.01" required /></label>
+            <label>Forma de pagamento<select name="forma_pagamento">
+                <option value="PIX">PIX</option>
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="CARTAO_CREDITO">Cartão de crédito</option>
+                <option value="CARTAO_DEBITO">Cartão de débito</option>
+                <option value="TRANSFERENCIA">Transferência</option>
+              </select></label>
+            <label>Data pagamento<input name="data_pagamento" type="date" required /></label>
+            <div class="form-actions"><button type="submit">Salvar</button><button type="button" class="secondary"
+                data-clear="pagamentos">Limpar</button></div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Pagamentos cadastrados</h3>
+            </div>
+            <div id="pagamentosTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="multas">
+        <div class="grid two">
+          <form class="card form-card" data-resource="multas">
+            <h3>Cadastrar multa</h3>
+            <label>Locação<select name="id_locacao" required data-select="locacoes"></select></label>
+            <label>Motivo<input name="motivo" required /></label>
+            <label>Valor<input name="valor" type="number" step="0.01" required /></label>
+            <label>Data da multa<input name="data_multa" type="date" required /></label>
+            <div class="form-actions"><button type="submit">Salvar</button><button type="button" class="secondary"
+                data-clear="multas">Limpar</button></div>
+          </form>
+          <div class="card table-card">
+            <div class="table-header">
+              <h3>Multas cadastradas</h3>
+            </div>
+            <div id="multasTable"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app/script.js"></script>
+</body>
+
+</html>
